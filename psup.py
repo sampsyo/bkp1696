@@ -77,10 +77,10 @@ class Supply(object):
         return tuple(_numfields(resp, (3, 3)))
     def enable(self):
         """Enable output."""
-        self.command('SOUT', '1')
-    def disable(self):
-        """Enable output."""
         self.command('SOUT', '0')
+    def disable(self):
+        """Disable output."""
+        self.command('SOUT', '1')
 
     # Context manager.
     def __enter__(self):
