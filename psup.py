@@ -1,4 +1,4 @@
-from __future__ import division
+
 import serial
 import glob
 import time
@@ -37,7 +37,10 @@ class Supply(object):
         self.ser.flushInput()
         self.ser.flushOutput()
 
-        self.ser.write(code + address + param + "\r")
+        command_string = code + address + param + "\r"
+#        print("Send", command_string)
+        command_bytes = command_string.encode('utf-8')  # Encode the string to bytes using UTF-8
+        self.ser.write(command_bytes)
         self.ser.flush()
 
         out = None
@@ -46,15 +49,15 @@ class Supply(object):
             resp = ''
             while True:
                 char = self.ser.read()
-                resp += char
-                if char == '\r':
+                resp += char.decode('ascii')
+                if char == b'\r':
                     break
 
             if resp == 'OK\r':
                 return out
 
             if out is not None:
-                print 'received more than one line of output without OK!'
+                print('received more than one line of output without OK!')
                 return resp
 
             out = resp
@@ -93,12 +96,12 @@ class Supply(object):
 if __name__ == '__main__':
     with Supply() as sup:
         time.sleep(0.5)
-        sup.voltage(1.3)
+        sup.voltage(12.3)
         sup.enable()
         time.sleep(0.5)
-        print 'Reading', sup.reading()
-        print 'Maxima', sup.maxima()
-        print 'Settings', sup.settings()
+        print('Reading', sup.reading())
+        print('Maxima', sup.maxima())
+        print('Settings', sup.settings())
         sup.disable()
-        print 'Disabled; reading', sup.reading()
         time.sleep(0.5)
+        print('Disabled; reading', sup.reading())
