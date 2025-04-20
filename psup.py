@@ -132,9 +132,7 @@ class Supply(object):
         params+=_num2str(amps,length=3,factor=100)
         params+=_num2str(minute,length=2,factor=1)
         params+=_num2str(seconds,length=2,factor=1)
-        self.command('PROP',params)
-
-        pass
+        return self.command('PROP',params)
 
 
     def program_get_step(self,step):
@@ -148,13 +146,10 @@ class Supply(object):
 
     def program_run(self,cycles):
         cycles=f'{cycles:04d}'
-        mem=self.command('RUNP',param=cycles)
-        return
+        return self.command('RUNP',param=cycles)
 
     def program_stop(self):
-        mem=self.command('STOP')
-        return
-
+        return self.command('STOP')
 
 
     def screen(self):
